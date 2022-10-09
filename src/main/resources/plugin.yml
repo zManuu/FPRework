@@ -1,0 +1,4 @@
+name: FPRework
+version: '${project.version}'
+main: de.manu.fprework.FPRework
+api-version: 1.19
