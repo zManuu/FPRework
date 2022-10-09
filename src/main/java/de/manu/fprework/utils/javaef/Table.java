@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Table<T extends Entity> {
 
@@ -105,7 +106,7 @@ public class Table<T extends Entity> {
     }
 
     @Nullable
-    public T query(@NotNull EntityConsumer<T> consumer) {
+    public T query(@NotNull Predicate<T> consumer) {
         for (T e : getAll()) {
             if (consumer.test(e)) return e;
         }
