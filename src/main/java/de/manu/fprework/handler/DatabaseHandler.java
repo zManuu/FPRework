@@ -1,10 +1,12 @@
 package de.manu.fprework.handler;
 
 
+import de.manu.fprework.FPRework;
 import de.manu.fprework.models.Account;
 import de.manu.fprework.models.Character;
 import de.manu.fprework.utils.javaef.Database;
 import de.manu.fprework.utils.javaef.Table;
+import org.bukkit.Bukkit;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class DatabaseHandler {
 
         Accounts = AccountTable.getAll();
         Characters = CharacterTable.getAll();
+
+        FPRework.print("§a[FP] Database-Load | Accounts: " + Accounts.size());
+        FPRework.print("§a[FP] Database-Load | Characters: " + Characters.size());
     }
 
 }

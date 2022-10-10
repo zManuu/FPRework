@@ -1,32 +1,57 @@
 package de.manu.fprework;
 
-import de.manu.fprework.commands.AccountCommand;
-import de.manu.fprework.handler.DatabaseHandler;
-import de.manu.fprework.listeners.ConnectionListener;
+import de.manu.fprework.commands.*;
+import de.manu.fprework.handler.*;
+import de.manu.fprework.listeners.*;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
+
 public final class FPRework extends JavaPlugin {
+
+    public static void print(String msg) {
+        Bukkit.getConsoleSender().sendMessage(msg);
+    }
 
     @Override
     public void onEnable() {
         DatabaseHandler.loadAll();
 
-        // COMMANDS
-        getCommand("account").setExecutor(new AccountCommand());
+        try {
 
-        // LISTENERS
-        registerListeners(
-                new ConnectionListener()
-        );
+            registerCommands(
+                    AccountCommand.class
+            );
+
+            registerListeners(
+                    ConnectionListener.class,
+                    ChatListener.class
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void registerListeners(Listener... listeners) {
+    @SafeVarargs
+    private void registerCommands(Class<? extends CommandExecutor>... commandClasses) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        for (Class<? extends CommandExecutor> commandClass : commandClasses) {
+            var commandName = commandClass.getSimpleName().replace("Command", "").toLowerCase();
+            print("§e[FP] Commands-Load | " + commandName + ": " + commandClass.getSimpleName() + ".java");
+            Objects.requireNonNull(getCommand(commandName)).setExecutor((CommandExecutor) commandClass.getConstructors()[0].newInstance());
+        }
+    }
+
+    @SafeVarargs
+    private void registerListeners(Class<? extends Listener>... listeners) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         PluginManager pm = Bukkit.getPluginManager();
-        for (Listener listener : listeners) {
-            pm.registerEvents(listener, this);
+        for (Class<? extends Listener> listener : listeners) {
+            pm.registerEvents((Listener) listener.getConstructors()[0].newInstance(), this);
         }
     }
 

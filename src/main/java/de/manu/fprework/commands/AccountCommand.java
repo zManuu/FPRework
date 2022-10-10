@@ -49,32 +49,33 @@ public class AccountCommand implements CommandExecutor {
 
     private void syntax(Player player) {
         player.sendMessage(
-                Constants.TLINE +
-                    "\nAccount - Syntax:" +
-                    "\n/account info" +
-                    "\n/account setName <name>" +
-                    Constants.BLINE
+                Constants.LINE_T +
+                    "\n§4Account - Syntax:" +
+                    "\n§c/account info" +
+                    "\n§c/account setName <name>" +
+                    Constants.LINE_B
         );
     }
 
     private void info(Player player, Account acc) {
         player.sendMessage(
-                Constants.TLINE +
-                        "\nAccount info für " + acc.name + ":" +
-                        "\nID: " + acc.id +
-                        "\nName: " + acc.name +
-                        "\nUUID: " + acc.uuid +
-                        Constants.BLINE
+                Constants.LINE_T +
+                        "\n§2Account info für " + acc.name + ":" +
+                        "\n§aID: " + acc.id +
+                        "\n§aName: " + acc.name +
+                        "\n§aUUID: " + acc.uuid +
+                        Constants.LINE_B
         );
     }
 
     private void setName(Player player, Account acc, String value) {
         if (value == null || value.length() < 5 || value.length() > 50) {
-            player.sendMessage("Der Name muss zwischen 5 und 50 Zeichen lang sein!");
+            player.sendMessage(Constants.M_ERROR + "Der Name muss zwischen 5 und 50 Zeichen lang sein!");
             return;
         }
         acc.setName(value);
         DatabaseHandler.AccountTable.save(acc);
+        player.sendMessage(Constants.M_SUCCESS + "Dein Accountname ist jetzt " + value + ".");
     }
 
 }

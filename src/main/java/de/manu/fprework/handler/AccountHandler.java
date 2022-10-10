@@ -1,6 +1,7 @@
 package de.manu.fprework.handler;
 
 import de.manu.fprework.models.Account;
+import de.manu.fprework.utils.Constants;
 import org.bukkit.entity.Player;
 
 public class AccountHandler {
@@ -12,11 +13,12 @@ public class AccountHandler {
                 .orElse(null);
     }
 
-    public static void createAccount(Player player) {
+    public static Account createAccount(Player player) {
         var acc = new Account(player.getName(), player.getUniqueId().toString());
         DatabaseHandler.Accounts.add(acc);
         DatabaseHandler.AccountTable.insert(acc);
-        player.sendMessage("Ein Account wurde für dich erstellt!");
+        player.sendMessage("§7§lWillkommen auf §5§lFantasy§6§lPixel§7§l!");
+        return acc;
     }
 
 }

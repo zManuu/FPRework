@@ -2,7 +2,12 @@ package de.manu.fprework.utils;
 
 public class Constants {
 
-    public static String TLINE = "-----------------------------";
-    public static String BLINE = "\n-----------------------------";
+    public static String LINE_T = "§7-----------------------------";
+    public static String LINE_B = "\n§7-----------------------------";
+
+    public static String M_PREFIX = "§8[§5Fantasy§6Pixel§8] ";
+    public static String M_INFO = M_PREFIX + "§7";
+    public static String M_SUCCESS = M_PREFIX + "§a";
+    public static String M_ERROR = M_PREFIX + "§c";
 
 }
