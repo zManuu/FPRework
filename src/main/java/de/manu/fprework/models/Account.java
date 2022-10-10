@@ -7,11 +7,13 @@ public class Account extends Entity {
     public int id;
     public String name;
     public String uuid;
+    public int selectedChar;
 
-    public Account(int id, String name, String uuid) {
+    public Account(int id, String name, String uuid, int selectedChar) {
         this.id = id;
         this.name = name;
         this.uuid = uuid;
+        this.selectedChar = selectedChar;
     }
 
     public Account(String name, String uuid) {
@@ -26,5 +28,9 @@ public class Account extends Entity {
     @Override
     public int getId() {
         return id;
+    }
+
+    public void setSelectedChar(int selectedChar) {
+        this.selectedChar = selectedChar;
     }
 }

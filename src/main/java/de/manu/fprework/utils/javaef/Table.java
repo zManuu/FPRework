@@ -31,22 +31,6 @@ public class Table<T extends Entity> {
         }
     }
 
-    public List<String> getFields() {
-        return fields;
-    }
-
-    public void addField(String name) {
-        fields.add(name);
-    }
-
-    public Database getDatabase() {
-        return database;
-    }
-
-    public String getName() {
-        return name;
-    }
-
 
     public void save(@NotNull T obj) {
         StringBuilder statement = new StringBuilder("UPDATE ").append(name).append(" SET");

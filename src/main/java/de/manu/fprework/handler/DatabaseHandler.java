@@ -6,7 +6,6 @@ import de.manu.fprework.models.Account;
 import de.manu.fprework.models.Character;
 import de.manu.fprework.utils.javaef.Database;
 import de.manu.fprework.utils.javaef.Table;
-import org.bukkit.Bukkit;
 
 import java.util.List;
 

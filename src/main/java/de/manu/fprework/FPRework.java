@@ -18,8 +18,12 @@ public final class FPRework extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(msg);
     }
 
+    public static FPRework INSTANCE;
+
     @Override
     public void onEnable() {
+        INSTANCE = this;
+
         DatabaseHandler.loadAll();
 
         try {
@@ -30,7 +34,8 @@ public final class FPRework extends JavaPlugin {
 
             registerListeners(
                     ConnectionListener.class,
-                    ChatListener.class
+                    ChatListener.class,
+                    InventoryListener.class
             );
 
         } catch (Exception e) {

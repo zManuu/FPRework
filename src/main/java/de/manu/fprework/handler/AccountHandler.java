@@ -13,6 +13,13 @@ public class AccountHandler {
                 .orElse(null);
     }
 
+    public static Account getAccount(int id) {
+        return DatabaseHandler.Accounts.stream()
+                .filter(e -> e.id == id)
+                .findAny()
+                .orElse(null);
+    }
+
     public static Account createAccount(Player player) {
         var acc = new Account(player.getName(), player.getUniqueId().toString());
         DatabaseHandler.Accounts.add(acc);

@@ -10,8 +10,6 @@ import java.util.List;
 
 public class Database {
 
-    public static final List<Database> DbPool = new ArrayList<>();
-
     private final String host;
     private final String user;
     private final String password;
@@ -26,26 +24,6 @@ public class Database {
         this.name = name;
         this.port = port;
         tables = new ArrayList<>();
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public List<Table<? extends Entity>> getTables() {
-        return tables;
     }
 
     protected void addTable(Table<? extends Entity> table) {

@@ -9,5 +9,6 @@ public class Constants {
     public static String M_INFO = M_PREFIX + "§7";
     public static String M_SUCCESS = M_PREFIX + "§a";
     public static String M_ERROR = M_PREFIX + "§c";
+    public static String M_WARNING = M_PREFIX + "§e";
 
 }
