@@ -28,18 +28,10 @@ public class CharacterHandler {
     }
 
     public static void openSelectCharTypeMenu(Player player) {
-        InventoryHandler.buildInventory(player, "§lWähle einen Charakter-Typen", InventoryType.HOPPER, () -> {
-                    openSelectCharTypeMenu(player);
-                },
-                new InventoryHandler.CustomInventoryItem(1, new ItemStack(Material.STICK), () -> {
-                    createChar(player, 1);
-                }),
-                new InventoryHandler.CustomInventoryItem(2, new ItemStack(Material.BOW), () -> {
-                    createChar(player, 2);
-                }),
-                new InventoryHandler.CustomInventoryItem(3, new ItemStack(Material.STONE_SWORD), () -> {
-                    createChar(player, 3);
-                }));
+        InventoryHandler.buildInventory(player, "§lWähle einen Charakter-Typen", InventoryType.HOPPER, () -> openSelectCharTypeMenu(player),
+                new InventoryHandler.CustomInventoryItem(1, new ItemStack(Material.STICK), () -> createChar(player, 1)),
+                new InventoryHandler.CustomInventoryItem(2, new ItemStack(Material.BOW), () -> createChar(player, 2)),
+                new InventoryHandler.CustomInventoryItem(3, new ItemStack(Material.STONE_SWORD), () -> createChar(player, 3)));
     }
 
     private static void createChar(Player player, int characterClass) {
@@ -51,7 +43,6 @@ public class CharacterHandler {
         DatabaseHandler.AccountTable.save(account);
         player.sendMessage(Constants.M_SUCCESS + "Dein Charakter ist erstellt worden!");
         player.setInvisible(false);
-        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 1, 1);
     }
 
 }

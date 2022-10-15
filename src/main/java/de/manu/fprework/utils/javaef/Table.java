@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -117,12 +114,17 @@ public class Table<T extends Entity> {
             }
         }
         sqlStatement.deleteCharAt(sqlStatement.length() - 1);
-        sqlStatement.append(" ) RETURNING `id`");
-        try (var conn = database.generateConnection(); var stmt = conn.prepareStatement(sqlStatement.toString()); var rs = stmt.executeQuery()) {
-            System.out.println("rs.next() = " + rs.next());
-            System.out.println("rs.getInt(0) = " + rs.getInt(0));
+        sqlStatement.append(" )");
+        try (var conn = database.generateConnection(); var stmt = conn.prepareStatement(sqlStatement.toString(), Statement.RETURN_GENERATED_KEYS)) {
+            var affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) throw new SQLException("Couldn't insert [1] Entity of type " + mappedEntityClass.getSimpleName() + ". SQL: " + sqlStatement.toString());
+            var rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                entity.setId(rs.getInt(1));
+            } else {
+                throw new SQLException("Couldn't insert [2] Entity of type " + mappedEntityClass.getSimpleName() + ". SQL: " + sqlStatement.toString());
+            }
         } catch (SQLException e) { e.printStackTrace(); }
-
     }
 
     public void remove(@NotNull T entity) {
