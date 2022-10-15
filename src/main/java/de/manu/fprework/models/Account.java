@@ -30,6 +30,11 @@ public class Account extends Entity {
         return id;
     }
 
+    @Override
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setSelectedChar(int selectedChar) {
         this.selectedChar = selectedChar;
     }

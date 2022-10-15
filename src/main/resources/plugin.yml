@@ -4,3 +4,4 @@ main: de.manu.fprework.FPRework
 api-version: 1.19
 commands:
   account:
+  lock:

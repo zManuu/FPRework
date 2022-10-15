@@ -25,38 +25,41 @@ public final class FPRework extends JavaPlugin {
         INSTANCE = this;
 
         DatabaseHandler.loadAll();
+        PlaytimeHandler.init();
 
-        try {
+        registerCommands(
+                AccountCommand.class
+        );
 
-            registerCommands(
-                    AccountCommand.class
-            );
-
-            registerListeners(
-                    ConnectionListener.class,
-                    ChatListener.class,
-                    InventoryListener.class
-            );
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        registerListeners(
+                ConnectionListener.class,
+                ChatListener.class,
+                InventoryListener.class
+        );
     }
 
     @SafeVarargs
-    private void registerCommands(Class<? extends CommandExecutor>... commandClasses) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private void registerCommands(Class<? extends CommandExecutor>... commandClasses) {
         for (Class<? extends CommandExecutor> commandClass : commandClasses) {
             var commandName = commandClass.getSimpleName().replace("Command", "").toLowerCase();
             print("§e[FP] Commands-Load | " + commandName + ": " + commandClass.getSimpleName() + ".java");
-            Objects.requireNonNull(getCommand(commandName)).setExecutor((CommandExecutor) commandClass.getConstructors()[0].newInstance());
+            try {
+                Objects.requireNonNull(getCommand(commandName)).setExecutor((CommandExecutor) commandClass.getConstructors()[0].newInstance());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @SafeVarargs
-    private void registerListeners(Class<? extends Listener>... listeners) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private void registerListeners(Class<? extends Listener>... listeners) {
         PluginManager pm = Bukkit.getPluginManager();
         for (Class<? extends Listener> listener : listeners) {
-            pm.registerEvents((Listener) listener.getConstructors()[0].newInstance(), this);
+            try {
+                pm.registerEvents((Listener) listener.getConstructors()[0].newInstance(), this);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

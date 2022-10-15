@@ -6,6 +6,8 @@ public abstract class Entity {
 
     public abstract int getId();
 
+    public abstract void setId(int id);
+
     public boolean equalsId(@Nullable Entity other) {
         return other != null && other.getId() == this.getId();
     }

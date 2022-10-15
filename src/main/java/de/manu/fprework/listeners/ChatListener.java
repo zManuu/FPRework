@@ -15,7 +15,6 @@ public class ChatListener implements Listener {
         if (!(event.getSender() instanceof Player)) return;
 
         var player = (Player) event.getSender();
-        var acc = AccountHandler.getAccount(player);
 
         var buffer = event.getBuffer();
         var args = buffer.split(" ");

@@ -1,5 +1,6 @@
 package de.manu.fprework.utils.javaef;
 
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,7 +98,7 @@ public class Table<T extends Entity> {
         return null;
     }
 
-    public void insert(@NotNull T obj) {
+    public void insert(@NotNull T entity) {
         StringBuilder sqlStatement = new StringBuilder("INSERT INTO `").append(name).append("` (");
         for (var fieldName : fields) {
             sqlStatement.append(" `").append(fieldName).append("`,");
@@ -107,7 +108,7 @@ public class Table<T extends Entity> {
         for (var i=1; i<fields.size(); i++) {
             try {
                 var fieldName = fields.get(i);
-                var value = obj.getClass().getField(fieldName).get(obj);
+                var value = entity.getClass().getField(fieldName).get(entity);
                 if (value == Boolean.FALSE) value = 0;
                 if (value == Boolean.TRUE) value = 1;
                 sqlStatement.append(" '").append(value).append("',");
@@ -116,7 +117,16 @@ public class Table<T extends Entity> {
             }
         }
         sqlStatement.deleteCharAt(sqlStatement.length() - 1);
-        sqlStatement.append(" )");
+        sqlStatement.append(" ) RETURNING `id`");
+        try (var conn = database.generateConnection(); var stmt = conn.prepareStatement(sqlStatement.toString()); var rs = stmt.executeQuery()) {
+            System.out.println("rs.next() = " + rs.next());
+            System.out.println("rs.getInt(0) = " + rs.getInt(0));
+        } catch (SQLException e) { e.printStackTrace(); }
+
+    }
+
+    public void remove(@NotNull T entity) {
+        var sqlStatement = "DELETE FROM " + name + " WHERE `id`=" + entity.getId();
         try (var conn = database.generateConnection(); var stmt = conn.prepareStatement(sqlStatement.toString())) {
             stmt.execute();
         } catch (SQLException e) { e.printStackTrace(); }
