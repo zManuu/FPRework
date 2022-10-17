@@ -15,7 +15,6 @@ public class Database {
     private final String password;
     private final String name;
     private final int port;
-    private final List<Table<? extends Entity>> tables;
 
     public Database(@NotNull String host, @NotNull String user, @NotNull String password, @NotNull String name, int port) {
         this.host = host;
@@ -23,11 +22,6 @@ public class Database {
         this.password = password;
         this.name = name;
         this.port = port;
-        tables = new ArrayList<>();
-    }
-
-    protected void addTable(Table<? extends Entity> table) {
-        tables.add(table);
     }
 
     @Nullable

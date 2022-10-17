@@ -18,13 +18,12 @@ public class ConnectionListener implements Listener {
         var character = CharacterHandler.getSelectedCharacter(account.id);
 
         if (character == null) {
-            player.setInvisible(true);
             CharacterHandler.openSelectCharTypeMenu(player);
             event.setJoinMessage(null);
             return;
         }
 
-        player.setGameMode(GameMode.ADVENTURE);
+        player.setGameMode(GameMode.SURVIVAL);
         player.sendMessage(Constants.M_INFO + "Du wurdest erfolgreich eingeloggt!");
         event.setJoinMessage("§8[§a+§8] §7" + account.name);
     }

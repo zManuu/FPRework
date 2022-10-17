@@ -26,15 +26,19 @@ public final class FPRework extends JavaPlugin {
 
         DatabaseHandler.loadAll();
         PlaytimeHandler.init();
+        WorldHandler.init();
 
         registerCommands(
-                AccountCommand.class
+                AccountCommand.class,
+                LockCommand.class
         );
 
         registerListeners(
                 ConnectionListener.class,
                 ChatListener.class,
-                InventoryListener.class
+                InventoryListener.class,
+                WorldListener.class,
+                DamageListener.class
         );
     }
 
@@ -42,7 +46,7 @@ public final class FPRework extends JavaPlugin {
     private void registerCommands(Class<? extends CommandExecutor>... commandClasses) {
         for (Class<? extends CommandExecutor> commandClass : commandClasses) {
             var commandName = commandClass.getSimpleName().replace("Command", "").toLowerCase();
-            print("§e[FP] Commands-Load | " + commandName + ": " + commandClass.getSimpleName() + ".java");
+            print("§e[FP] Command-Load | " + commandName + ": " + commandClass.getSimpleName() + ".java");
             try {
                 Objects.requireNonNull(getCommand(commandName)).setExecutor((CommandExecutor) commandClass.getConstructors()[0].newInstance());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -55,6 +59,7 @@ public final class FPRework extends JavaPlugin {
     private void registerListeners(Class<? extends Listener>... listeners) {
         PluginManager pm = Bukkit.getPluginManager();
         for (Class<? extends Listener> listener : listeners) {
+            print("§b[FP] Listener-Load | " + listener.getSimpleName());
             try {
                 pm.registerEvents((Listener) listener.getConstructors()[0].newInstance(), this);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {

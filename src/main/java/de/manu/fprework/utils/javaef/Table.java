@@ -22,13 +22,10 @@ public class Table<T extends Entity> {
         this.fields = new LinkedList<>();
         this.mappedEntityClass = clazz;
 
-        database.addTable(this);
-
         for (var field : clazz.getFields()) {
             this.fields.add(field.getName());
         }
     }
-
 
     public void save(@NotNull T obj) {
         StringBuilder statement = new StringBuilder("UPDATE ").append(name).append(" SET");

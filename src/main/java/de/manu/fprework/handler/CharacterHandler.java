@@ -1,17 +1,12 @@
 package de.manu.fprework.handler;
 
-import de.manu.fprework.FPRework;
 import de.manu.fprework.models.Character;
-import de.manu.fprework.models.CharacterClass;
 import de.manu.fprework.utils.Constants;
-import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitScheduler;
 
 public class CharacterHandler {
 
@@ -28,6 +23,8 @@ public class CharacterHandler {
     }
 
     public static void openSelectCharTypeMenu(Player player) {
+        player.setInvisible(true);
+        player.setGameMode(GameMode.ADVENTURE);
         InventoryHandler.buildInventory(player, "§lWähle einen Charakter-Typen", InventoryType.HOPPER, () -> openSelectCharTypeMenu(player),
                 new InventoryHandler.CustomInventoryItem(1, new ItemStack(Material.STICK), () -> createChar(player, 1)),
                 new InventoryHandler.CustomInventoryItem(2, new ItemStack(Material.BOW), () -> createChar(player, 2)),
@@ -43,6 +40,8 @@ public class CharacterHandler {
         DatabaseHandler.AccountTable.save(account);
         player.sendMessage(Constants.M_SUCCESS + "Dein Charakter ist erstellt worden!");
         player.setInvisible(false);
+        player.setGameMode(GameMode.SURVIVAL);
+        player.teleport(Constants.FIRST_SPAWN);
     }
 
 }

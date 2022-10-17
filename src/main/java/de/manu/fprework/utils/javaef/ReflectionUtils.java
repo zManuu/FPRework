@@ -1,6 +1,7 @@
 package de.manu.fprework.utils.javaef;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class ReflectionUtils {
@@ -19,7 +20,7 @@ public class ReflectionUtils {
         throw new IllegalArgumentException("Don't know how to convert to " + target);
     }
 
-    static Object instantiate(List<String> args, Class<? extends Entity> clazz) throws Exception {
+    static Object instantiate(List<String> args, Class<? extends Entity> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         for (Constructor<?> ctor : clazz.getConstructors()) {
             Class<?>[] paramTypes = ctor.getParameterTypes();
 

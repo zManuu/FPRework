@@ -1,6 +1,5 @@
 package de.manu.fprework.commands;
 
-import de.manu.fprework.handler.AccountHandler;
 import de.manu.fprework.handler.CharacterHandler;
 import de.manu.fprework.handler.DatabaseHandler;
 import de.manu.fprework.models.CharacterLockedItem;
@@ -23,13 +22,12 @@ public class LockCommand implements CommandExecutor {
         if (charId <= 0) return true;
 
         var itemInHand = player.getInventory().getItemInMainHand();
-        if (itemInHand.getData() == null || itemInHand.getData().getItemType() == Material.AIR) {
+        if (itemInHand.getData() == null || itemInHand.getItemMeta() == null || itemInHand.getData().getItemType() == Material.AIR) {
             player.sendMessage(Constants.M_WARNING + "Bitte nehme ein Item in die Hand.");
             return true;
         }
 
-        var displayName = itemInHand.getItemMeta().getDisplayName();
-
+        var displayName = itemInHand.getItemMeta().getDisplayName().isEmpty() ? itemInHand.getData().getItemType().name() : itemInHand.getItemMeta().getDisplayName();
 
         var existingLockedItem = DatabaseHandler.CharacterLockedItems.stream()
                 .filter(e -> e.charId == charId && e.itemDisplayName.equals(displayName))
