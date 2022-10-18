@@ -19,5 +19,6 @@ public class Constants {
     public static World WORLD = Bukkit.getWorld("Ephesus");
     public static Location FIRST_SPAWN = new Location(WORLD, 1246, 170, 1047);
     public static Location SPAWN = new Location(WORLD, 1275, 156, 1031);
+    public static Location DARK = new Location(WORLD, 1275.5, 62, 1031.5);
 
 }

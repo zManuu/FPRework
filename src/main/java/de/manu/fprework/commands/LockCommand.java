@@ -15,19 +15,27 @@ public class LockCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) return true;
+        if (!(sender instanceof Player player)) return true;
 
-        var player = (Player) sender;
-        var charId = CharacterHandler.getCharId(player);
-        if (charId <= 0) return true;
+        var item = player.getInventory().getItemInMainHand();
 
-        var itemInHand = player.getInventory().getItemInMainHand();
-        if (itemInHand.getData() == null || itemInHand.getItemMeta() == null || itemInHand.getData().getItemType() == Material.AIR) {
-            player.sendMessage(Constants.M_WARNING + "Bitte nehme ein Item in die Hand.");
+        if (item.getItemMeta() == null || item.getItemMeta().getDisplayName().isEmpty()) {
+            player.sendMessage(Constants.M_WARNING + "Dieses Item kannst du nicht locken.");
             return true;
         }
 
-        var displayName = itemInHand.getItemMeta().getDisplayName().isEmpty() ? itemInHand.getData().getItemType().name() : itemInHand.getItemMeta().getDisplayName();
+        var displayName = item.getItemMeta().getDisplayName();
+        var charId = CharacterHandler.getCharId(player);
+
+        // Item is locked through server? (HELPBOOK/CHAR-MANAGEMENT)
+        var staticItem = DatabaseHandler.ServerItems.stream()
+                .filter(e -> e.displayName.equals(displayName))
+                .findAny()
+                .orElse(null);
+        if (staticItem != null && staticItem.type == 5) {
+            player.sendMessage(Constants.M_WARNING + "Dieses Item kannst du nicht locken.");
+            return true;
+        }
 
         var existingLockedItem = DatabaseHandler.CharacterLockedItems.stream()
                 .filter(e -> e.charId == charId && e.itemDisplayName.equals(displayName))

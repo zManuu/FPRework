@@ -24,14 +24,6 @@ public class CharacterLockedItem extends Entity {
         return id;
     }
 
-    public int getCharId() {
-        return charId;
-    }
-
-    public String getItemDisplayName() {
-        return itemDisplayName;
-    }
-
     @Override
     public void setId(int id) {
         this.id = id;
