@@ -74,7 +74,7 @@ public class AccountCommand implements CommandExecutor {
             return;
         }
         acc.setName(value);
-        DatabaseHandler.AccountTable.save(acc);
+        DatabaseHandler.table(Account.class).save(acc);
         player.sendMessage(Constants.M_SUCCESS + "Dein Accountname ist jetzt " + value + ".");
     }
 

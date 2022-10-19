@@ -23,6 +23,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import com.mojang.datafixers.kinds.Const;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +35,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
+import org.bukkit.persistence.PersistentDataType;
 
 /**
  * ItemBuilder - An API class to create an
@@ -55,6 +57,7 @@ public class ItemBuilder {
     private String displayname;
     private List<String> lore = new ArrayList<>();
     private List<ItemFlag> flags = new ArrayList<>();
+    private int dbId = -1;
 
     private boolean andSymbol = true;
     private boolean unsafeStackSize = false;
@@ -161,6 +164,15 @@ public class ItemBuilder {
         this.displayname = builder.displayname;
         this.lore = builder.lore;
         this.flags = builder.flags;
+    }
+
+    /**
+     * Sets the Database-ID of the ItemMeta
+     * @param id ID of the ServerItem object
+     */
+    public ItemBuilder databaseId(int id) {
+        this.dbId = id;
+        return this;
     }
 
     /**
@@ -617,6 +629,18 @@ public class ItemBuilder {
             for (ItemFlag f : flags) {
                 meta.addItemFlags(f);
             }
+        }
+        meta.addItemFlags(
+                ItemFlag.HIDE_ATTRIBUTES,
+                ItemFlag.HIDE_DESTROYS,
+                ItemFlag.HIDE_DYE,
+                ItemFlag.HIDE_ENCHANTS,
+                ItemFlag.HIDE_PLACED_ON,
+                ItemFlag.HIDE_POTION_EFFECTS,
+                ItemFlag.HIDE_UNBREAKABLE
+        );
+        if (dbId > -1) {
+            meta.getPersistentDataContainer().set(Constants.KEY_ITEM_ID, PersistentDataType.INTEGER, dbId);
         }
         item.setItemMeta(meta);
         return item;

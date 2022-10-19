@@ -3,7 +3,9 @@ package de.manu.fprework;
 import de.manu.fprework.commands.*;
 import de.manu.fprework.handler.*;
 import de.manu.fprework.listeners.*;
+import de.manu.fprework.utils.Constants;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -24,13 +26,16 @@ public final class FPRework extends JavaPlugin {
     public void onEnable() {
         INSTANCE = this;
 
+        Constants.KEY_ITEM_ID = new NamespacedKey(this, "ITEM_ID");
+
         DatabaseHandler.loadAll();
         PlaytimeHandler.init();
         WorldHandler.init();
 
         registerCommands(
                 AccountCommand.class,
-                LockCommand.class
+                LockCommand.class,
+                ItemCommand.class
         );
 
         registerListeners(

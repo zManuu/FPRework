@@ -1,6 +1,7 @@
 package de.manu.fprework.listeners;
 
 import de.manu.fprework.handler.AccountHandler;
+import de.manu.fprework.handler.DatabaseHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,8 +15,6 @@ public class ChatListener implements Listener {
     public static void onTabComplete(TabCompleteEvent event) {
         if (!(event.getSender() instanceof Player)) return;
 
-        var player = (Player) event.getSender();
-
         var buffer = event.getBuffer();
         var args = buffer.split(" ");
 
@@ -28,6 +27,16 @@ public class ChatListener implements Listener {
                     res.add("info");
                 } else if (args[1].equalsIgnoreCase("setName") && args.length < 3) {
                     res.add("<name>");
+                }
+                break;
+            case "/item":
+                if (args.length == 1) {
+                    for (var itemType : DatabaseHandler.ServerItems) {
+                        if (itemType.type != 5)
+                            res.add(itemType.name);
+                    }
+                } else if (args.length == 2) {
+                    res.add("<anzahl>");
                 }
                 break;
         }

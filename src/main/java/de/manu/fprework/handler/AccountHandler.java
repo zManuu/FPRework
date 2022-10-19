@@ -22,7 +22,7 @@ public class AccountHandler {
     public static Account createAccount(Player player) {
         var acc = new Account(player.getName(), player.getUniqueId().toString());
         DatabaseHandler.Accounts.add(acc);
-        DatabaseHandler.AccountTable.insert(acc);
+        DatabaseHandler.table(Account.class).insert(acc);
         player.sendMessage("§7§lWillkommen auf §5§lFantasy§6§lPixel§7§l!");
         return acc;
     }

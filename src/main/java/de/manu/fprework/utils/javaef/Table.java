@@ -14,7 +14,7 @@ public class Table<T extends Entity> {
     public Database database;
     public final String name;
     public final List<String> fields;
-    private final Class<? extends Entity> mappedEntityClass;
+    public final Class<? extends Entity> mappedEntityClass;
 
     public Table(@NotNull Database database, @NotNull String name, @NotNull Class<T> clazz) {
         this.database = database;

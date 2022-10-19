@@ -4,7 +4,6 @@ import de.manu.fprework.handler.CharacterHandler;
 import de.manu.fprework.handler.DatabaseHandler;
 import de.manu.fprework.models.CharacterLockedItem;
 import de.manu.fprework.utils.Constants;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -44,12 +43,12 @@ public class LockCommand implements CommandExecutor {
 
         if (existingLockedItem != null) {
             DatabaseHandler.CharacterLockedItems.remove(existingLockedItem);
-            DatabaseHandler.CharacterLockedItemTable.remove(existingLockedItem);
+            DatabaseHandler.table(CharacterLockedItem.class).remove(existingLockedItem);
             player.sendMessage(Constants.M_WARNING + "Das Item ist jetzt nicht mehr gesichert!");
         } else {
             var newLockedItem = new CharacterLockedItem(charId, displayName);
             DatabaseHandler.CharacterLockedItems.add(newLockedItem);
-            DatabaseHandler.CharacterLockedItemTable.insert(newLockedItem);
+            DatabaseHandler.table(CharacterLockedItem.class).insert(newLockedItem);
             player.sendMessage(Constants.M_SUCCESS + "Das Item ist jetzt gesichert!");
         }
 

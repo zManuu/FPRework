@@ -3,6 +3,7 @@ package de.manu.fprework.handler;
 import de.manu.fprework.utils.Constants;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 
 public class WorldHandler {
@@ -19,7 +20,7 @@ public class WorldHandler {
         world.setGameRule(GameRule.DO_WARDEN_SPAWNING, false);
         world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
 
-        //Initializing Legacy Material Support
+        // Initializing Legacy Material Support
         var a = new ItemStack(Material.DIAMOND_HOE);
         a.getData();
         a.getItemMeta();

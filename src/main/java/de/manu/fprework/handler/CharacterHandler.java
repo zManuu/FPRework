@@ -1,18 +1,13 @@
 package de.manu.fprework.handler;
 
+import de.manu.fprework.models.Account;
 import de.manu.fprework.models.Character;
-import de.manu.fprework.models.CharacterItem;
-import de.manu.fprework.models.CharacterLockedItem;
 import de.manu.fprework.utils.Constants;
 import de.manu.fprework.utils.ItemBuilder;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class CharacterHandler {
 
@@ -42,17 +37,18 @@ public class CharacterHandler {
         var account = AccountHandler.getAccount(player);
         var character = new Character(account.id, characterClass, 0, 0);
         DatabaseHandler.Characters.add(character);
-        DatabaseHandler.CharacterTable.insert(character);
+        DatabaseHandler.table(Character.class).insert(character);
         account.setSelectedChar(character.id);
-        DatabaseHandler.AccountTable.save(account);
+        DatabaseHandler.table(Account.class).save(account);
         player.sendMessage(Constants.M_SUCCESS + "Dein Charakter ist erstellt worden!");
         player.setInvisible(false);
         player.setGameMode(GameMode.SURVIVAL);
         player.teleport(Constants.FIRST_SPAWN);
         player.getInventory().clear();
 
-        ItemHandler.addItem(player, 1, 1, 7); // QuestBook
-        ItemHandler.addItem(player, 2, 1, 8); // Char-Management
+        ItemHandler.setItem(player, "static_Questbook", 1, 7);
+        ItemHandler.setItem(player, "static_Charactermanagement", 1, 8);
+        ItemHandler.setItem(player, "food_Bread", 1, 1);
     }
 
 }
