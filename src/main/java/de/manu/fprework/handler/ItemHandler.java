@@ -2,13 +2,19 @@ package de.manu.fprework.handler;
 
 import de.manu.fprework.models.ServerItem;
 import de.manu.fprework.models.ServerItemStatsConsumable;
+import de.manu.fprework.models.ServerItemStatsWeapon;
 import de.manu.fprework.utils.Constants;
 import de.manu.fprework.utils.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class ItemHandler {
 
@@ -77,7 +83,7 @@ public class ItemHandler {
 
     public static ItemStack buildItem(ServerItem item, int amount) {
         var builder = new ItemBuilder(Material.valueOf(item.material));
-        builder.databaseId(item.id);
+        builder.setPDCValue(Constants.KEY_ITEM_ID, PersistentDataType.INTEGER, item.id);
         builder.amount(amount);
         builder.displayname(item.displayName);
         builder.lore(" ");
@@ -89,16 +95,33 @@ public class ItemHandler {
         switch (item.type) {
             case 1:
                 var cStats = getItemStatsConsumable(item);
-                if (cStats != null) {
-                    if (cStats.hunger > 0) builder.lore(" §8➥ §7Essen: §e" + cStats.hunger);
-                    if (cStats.hearts > 0) builder.lore(" §8➥ §7Heilung: §e" + cStats.hearts);
-                    if (!cStats.effectName.isEmpty()) {
-                        builder.lore(" §8➥ §7Effekt:");
-                        builder.lore("   §8➥ §7Name: §e" + cStats.effectName);
-                        builder.lore("   §8➥ §7Dauer: §e" + cStats.effectDuration);
-                        builder.lore("   §8➥ §7Stärke: §e" + cStats.effectStrength);
-                    }
+                if (cStats == null) break;
+                if (cStats.hunger > 0) builder.lore(" §8➥ §7Essen: §e" + cStats.hunger);
+                if (cStats.hearts > 0) builder.lore(" §8➥ §7Heilung: §e" + cStats.hearts);
+                if (!cStats.effectName.isEmpty()) {
+                    builder.lore(" §8➥ §7Effekt:");
+                    builder.lore("   §8➥ §7Name: §e" + cStats.effectName);
+                    builder.lore("   §8➥ §7Dauer: §e" + cStats.effectDuration);
+                    builder.lore("   §8➥ §7Stärke: §e" + cStats.effectStrength);
                 }
+                break;
+            case 2:
+                builder.unbreakable(true);
+                var wStats = getItemStatsWeapon(item);
+                if (wStats == null) break;
+                if (wStats.damage > 0) {
+                    if (item.material.equals("BOW") || item.material.equals("CROSSBOW"))
+                        builder.setPDCValue(Constants.KEY_BOW_DAMAGE, PersistentDataType.FLOAT, wStats.damage);
+                    else
+                        builder.attributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, wStats.damage);
+                    builder.lore(" §8➥ §7Schaden: §c" + wStats.damage);
+                }
+                if (wStats.attackSpeed > 0) {
+                    builder.attributeModifier(Attribute.GENERIC_ATTACK_SPEED, wStats.attackSpeed);
+                    builder.lore(" §8➥ §7Angriffs-Geschwindigkeit: §c" + wStats.attackSpeed);
+                }
+                if (wStats.bowInfinitive && (item.material.equals("BOW") || item.material.equals("CROSSBOW")))
+                    builder.enchant(Enchantment.ARROW_INFINITE, 1);
                 break;
         }
         builder.lore(" ");
@@ -118,6 +141,14 @@ public class ItemHandler {
     @Nullable
     public static ServerItemStatsConsumable getItemStatsConsumable(ServerItem item) {
         return DatabaseHandler.ServerItemStatsConsumable.stream()
+                .filter(e -> e.itemId == item.id)
+                .findAny()
+                .orElse(null);
+    }
+
+    @Nullable
+    public static ServerItemStatsWeapon getItemStatsWeapon(ServerItem item) {
+        return DatabaseHandler.ServerItemStatsWeapon.stream()
                 .filter(e -> e.itemId == item.id)
                 .findAny()
                 .orElse(null);

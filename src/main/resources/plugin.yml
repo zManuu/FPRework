@@ -6,3 +6,4 @@ commands:
   account:
   lock:
   item:
+  reloaddb:

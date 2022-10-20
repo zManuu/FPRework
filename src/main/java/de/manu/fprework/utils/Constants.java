@@ -23,6 +23,7 @@ public class Constants {
     public static Location SPAWN = new Location(WORLD, 1275, 156, 1031);
     public static Location DARK = new Location(WORLD, 1275.5, 62, 1031.5);
     public static NamespacedKey KEY_ITEM_ID;
+    public static NamespacedKey KEY_BOW_DAMAGE;
     public static List<String> INTERACT_DISALLOWED_BLOCKS = Arrays.asList(
             "CHEST", "BLAST_FURNACE", "BARREL", "STONECUTTER", "ANVIL", "CHIPPED_ANVIL", "DAMAGED_ANVIL", "LEGACY_ANVIL",
             "LEGACY_WORKBENCH", "LEVER", "SMOKER", "CRAFTING_TABLE", "LEGACY_CHEST", "TRAPPED_CHEST", "LEGACY_FURNACE",

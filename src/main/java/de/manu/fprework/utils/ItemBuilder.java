@@ -16,10 +16,7 @@ package de.manu.fprework.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.Gson;
 
@@ -28,6 +25,9 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -36,6 +36,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * ItemBuilder - An API class to create an
@@ -57,7 +58,6 @@ public class ItemBuilder {
     private String displayname;
     private List<String> lore = new ArrayList<>();
     private List<ItemFlag> flags = new ArrayList<>();
-    private int dbId = -1;
 
     private boolean andSymbol = true;
     private boolean unsafeStackSize = false;
@@ -166,12 +166,8 @@ public class ItemBuilder {
         this.flags = builder.flags;
     }
 
-    /**
-     * Sets the Database-ID of the ItemMeta
-     * @param id ID of the ServerItem object
-     */
-    public ItemBuilder databaseId(int id) {
-        this.dbId = id;
+    public <T, Z> ItemBuilder setPDCValue(NamespacedKey key, PersistentDataType<T, Z> type, Z value) {
+        getMeta().getPersistentDataContainer().set(key, type, value);
         return this;
     }
 
@@ -249,8 +245,7 @@ public class ItemBuilder {
      * @param level   Level of the Enchantment
      */
     public ItemBuilder enchant(Enchantment enchant, int level) {
-        Validate.notNull(enchant, "The Enchantment is null.");
-        enchantments.put(enchant, level);
+        getMeta().addEnchant(enchant, level, true);
         return this;
     }
 
@@ -366,8 +361,17 @@ public class ItemBuilder {
      * @param unbreakable If it should be unbreakable
      */
     public ItemBuilder unbreakable(boolean unbreakable) {
-        meta.setUnbreakable(unbreakable);
+        getMeta().setUnbreakable(unbreakable);
         return this;
+    }
+
+    public ItemBuilder attributeModifier(Attribute attribute, double amount, AttributeModifier.Operation operation) {
+        getMeta().addAttributeModifier(attribute, new AttributeModifier(UUID.randomUUID(), "___", amount, operation));
+        return this;
+    }
+
+    public ItemBuilder attributeModifier(Attribute attribute, double amount) {
+        return attributeModifier(attribute, amount, AttributeModifier.Operation.ADD_NUMBER);
     }
 
     /** Makes the ItemStack Glow like it had a Enchantment */
@@ -499,8 +503,11 @@ public class ItemBuilder {
     }
 
     /** Returns the ItemMeta */
+    @NotNull
     public ItemMeta getMeta() {
-        return meta;
+        if (this.meta == null)
+            this.meta = item.getItemMeta();
+        return this.meta;
     }
 
     /** Returns the MaterialData */
@@ -612,7 +619,7 @@ public class ItemBuilder {
         item.setType(material);
         item.setAmount(amount);
         item.setDurability(damage);
-        meta = item.getItemMeta();
+        if (meta == null) meta = item.getItemMeta();
         if (data != null) {
             item.setData(data);
         }
@@ -639,9 +646,6 @@ public class ItemBuilder {
                 ItemFlag.HIDE_POTION_EFFECTS,
                 ItemFlag.HIDE_UNBREAKABLE
         );
-        if (dbId > -1) {
-            meta.getPersistentDataContainer().set(Constants.KEY_ITEM_ID, PersistentDataType.INTEGER, dbId);
-        }
         item.setItemMeta(meta);
         return item;
     }

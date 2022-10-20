@@ -27,6 +27,7 @@ public final class FPRework extends JavaPlugin {
         INSTANCE = this;
 
         Constants.KEY_ITEM_ID = new NamespacedKey(this, "ITEM_ID");
+        Constants.KEY_BOW_DAMAGE = new NamespacedKey(this, "BOW_DAMAGE");
 
         DatabaseHandler.loadAll();
         PlaytimeHandler.init();
@@ -35,7 +36,8 @@ public final class FPRework extends JavaPlugin {
         registerCommands(
                 AccountCommand.class,
                 LockCommand.class,
-                ItemCommand.class
+                ItemCommand.class,
+                ReloadDBCommand.class
         );
 
         registerListeners(
@@ -43,7 +45,8 @@ public final class FPRework extends JavaPlugin {
                 ChatListener.class,
                 InventoryListener.class,
                 WorldListener.class,
-                DamageListener.class
+                DamageListener.class,
+                WeaponListener.class
         );
     }
 
