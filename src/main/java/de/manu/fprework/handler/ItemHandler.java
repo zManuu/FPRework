@@ -1,20 +1,17 @@
 package de.manu.fprework.handler;
 
-import de.manu.fprework.models.ServerItem;
-import de.manu.fprework.models.ServerItemStatsConsumable;
-import de.manu.fprework.models.ServerItemStatsWeapon;
+import de.manu.fprework.models.database.ServerItem;
+import de.manu.fprework.models.database.ServerItemStatsConsumable;
+import de.manu.fprework.models.database.ServerItemStatsWeapon;
 import de.manu.fprework.utils.Constants;
 import de.manu.fprework.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
 
 public class ItemHandler {
 

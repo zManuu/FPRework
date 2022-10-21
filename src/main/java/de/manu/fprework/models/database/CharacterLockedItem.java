@@ -1,4 +1,4 @@
-package de.manu.fprework.models;
+package de.manu.fprework.models.database;
 
 import de.manu.fprework.utils.javaef.Entity;
 

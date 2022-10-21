@@ -1,6 +1,6 @@
 package de.manu.fprework.handler;
 
-import de.manu.fprework.models.Account;
+import de.manu.fprework.models.database.Account;
 import org.bukkit.entity.Player;
 
 public class AccountHandler {

@@ -30,5 +30,6 @@ public class Constants {
             "LEGACY_BURNING_FURNACE", "FURNACE", "BREWING_STAND", "LEGACY_BREWING_STAND", "LEGACY_BREWING_STAND_ITEM",
             "LOOM", "LECTERN", "ITEM_FRAME", "SMITHING_TABLE", "CARTOGRAPHY_TABLE", "FLOWER_POT"
     );
+    public static List<String> SKILL_BINDS = Arrays.asList("LLL", "LLR", "LRR", "RRR", "RRL", "RLL");
 
 }

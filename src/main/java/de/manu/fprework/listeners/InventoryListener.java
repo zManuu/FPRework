@@ -1,11 +1,9 @@
 package de.manu.fprework.listeners;
 
-import com.google.gson.Gson;
 import de.manu.fprework.handler.CharacterHandler;
 import de.manu.fprework.handler.DatabaseHandler;
 import de.manu.fprework.handler.InventoryHandler;
 import de.manu.fprework.handler.ItemHandler;
-import de.manu.fprework.models.Character;
 import de.manu.fprework.utils.Constants;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventHandler;
@@ -15,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -66,6 +63,7 @@ public class InventoryListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         var player = event.getPlayer();
+
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             // Right-click
             var item = player.getInventory().getItemInMainHand();

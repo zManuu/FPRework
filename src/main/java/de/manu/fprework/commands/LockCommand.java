@@ -2,7 +2,7 @@ package de.manu.fprework.commands;
 
 import de.manu.fprework.handler.CharacterHandler;
 import de.manu.fprework.handler.DatabaseHandler;
-import de.manu.fprework.models.CharacterLockedItem;
+import de.manu.fprework.models.database.CharacterLockedItem;
 import de.manu.fprework.utils.Constants;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

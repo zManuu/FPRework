@@ -1,7 +1,7 @@
 package de.manu.fprework.handler;
 
-import de.manu.fprework.models.Account;
-import de.manu.fprework.models.Character;
+import de.manu.fprework.models.database.Account;
+import de.manu.fprework.models.database.Character;
 import de.manu.fprework.utils.Constants;
 import de.manu.fprework.utils.ItemBuilder;
 import org.bukkit.GameMode;
@@ -21,6 +21,17 @@ public class CharacterHandler {
 
     public static int getCharId(Player player) {
         return AccountHandler.getAccount(player).selectedChar;
+    }
+
+    public static Character getCharacter(int charId) {
+        return DatabaseHandler.Characters.stream()
+                .filter(e -> e.id == charId)
+                .findAny()
+                .orElse(null);
+    }
+
+    public static Character getCharacter(Player player) {
+        return getCharacter(getCharId(player));
     }
 
     public static void openSelectCharTypeMenu(Player player) {

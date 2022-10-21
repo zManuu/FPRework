@@ -2,6 +2,7 @@ package de.manu.fprework.listeners;
 
 import de.manu.fprework.handler.AccountHandler;
 import de.manu.fprework.handler.DatabaseHandler;
+import de.manu.fprework.utils.Constants;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,6 +40,20 @@ public class ChatListener implements Listener {
                     res.add("<anzahl>");
                 }
                 break;
+            case "/skill":
+                if (args.length != 1) break;
+                for (var skill : DatabaseHandler.ServerSkills) {
+                    res.add(skill.name);
+                }
+                break;
+            case "/bindskill":
+                if (args.length == 1) {
+                    res.addAll(Constants.SKILL_BINDS);
+                } else if (args.length == 2) {
+                    for (var skill : DatabaseHandler.ServerSkills) {
+                        res.add(skill.name);
+                    }
+                }
         }
 
         event.setCompletions(res);

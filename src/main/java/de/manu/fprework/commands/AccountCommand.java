@@ -2,7 +2,7 @@ package de.manu.fprework.commands;
 
 import de.manu.fprework.handler.AccountHandler;
 import de.manu.fprework.handler.DatabaseHandler;
-import de.manu.fprework.models.Account;
+import de.manu.fprework.models.database.Account;
 import de.manu.fprework.utils.Constants;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

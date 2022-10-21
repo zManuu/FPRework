@@ -23,7 +23,8 @@ public class Table<T extends Entity> {
         this.mappedEntityClass = clazz;
 
         for (var field : clazz.getFields()) {
-            this.fields.add(field.getName());
+            if (!field.isAnnotationPresent(JavaEFIgnore.class))
+                this.fields.add(field.getName());
         }
     }
 

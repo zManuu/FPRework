@@ -20,6 +20,10 @@ public final class FPRework extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(msg);
     }
 
+    public static void setTimeout(Runnable runnable, int ticks) {
+        Bukkit.getScheduler().runTaskLater(INSTANCE, runnable, ticks);
+    }
+
     public static FPRework INSTANCE;
 
     @Override
@@ -32,12 +36,15 @@ public final class FPRework extends JavaPlugin {
         DatabaseHandler.loadAll();
         PlaytimeHandler.init();
         WorldHandler.init();
+        SkillsHandler.init();
 
         registerCommands(
                 AccountCommand.class,
                 LockCommand.class,
                 ItemCommand.class,
-                ReloadDBCommand.class
+                ReloadDBCommand.class,
+                SkillCommand.class,
+                BindSkillCommand.class
         );
 
         registerListeners(
@@ -46,7 +53,8 @@ public final class FPRework extends JavaPlugin {
                 InventoryListener.class,
                 WorldListener.class,
                 DamageListener.class,
-                WeaponListener.class
+                WeaponListener.class,
+                SkillListener.class
         );
     }
 

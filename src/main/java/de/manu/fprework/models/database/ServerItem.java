@@ -1,4 +1,4 @@
-package de.manu.fprework.models;
+package de.manu.fprework.models.database;
 
 import de.manu.fprework.utils.javaef.Entity;
 
@@ -10,14 +10,6 @@ public class ServerItem extends Entity {
     public String displayName;
     public String material;
     public int tier; // 0: Keine, 1: Gewöhnlich, 2: Selten, 3: Episch, 4: Legendär
-
-    public ServerItem(int type, String name, String displayName, String material, int tier) {
-        this.type = type;
-        this.name = name;
-        this.displayName = displayName;
-        this.material = material;
-        this.tier = tier;
-    }
 
     public ServerItem(int id, int type, String name, String displayName, String material, int tier) {
         this.id = id;
