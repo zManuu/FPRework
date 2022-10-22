@@ -5,3 +5,6 @@ Uses my own <a href="https://github.com/zManuu/JavaEF">Entity-Framework</a> for 
 
 <a href="https://github.com/zManuu/FPRework-Texturepack">Texturepack</a><br>
 <a href="https://github.com/zManuu/FPRework-Server">Server</a>
+
+## Tutorials
+<a href="https://github.com/zManuu/FPRework/wiki/Create-Skills">Create Skills</a>
