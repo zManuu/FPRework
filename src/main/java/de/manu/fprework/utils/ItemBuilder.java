@@ -20,7 +20,6 @@ import java.util.*;
 
 import com.google.gson.Gson;
 
-import com.mojang.datafixers.kinds.Const;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.8.3
  * @author Acquized
  * @contributor Kev575
+ * @contributor zManuu
  */
 public class ItemBuilder {
 

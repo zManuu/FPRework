@@ -8,9 +8,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CharacterHandler {
 
+    @Nullable
     public static Character getSelectedCharacter(int accountId) {
         var selectedCharacterId = AccountHandler.getAccount(accountId).selectedChar;
         return DatabaseHandler.Characters.stream()
@@ -19,10 +22,11 @@ public class CharacterHandler {
                 .orElse(null);
     }
 
-    public static int getCharId(Player player) {
+    public static int getCharId(@NotNull Player player) {
         return AccountHandler.getAccount(player).selectedChar;
     }
 
+    @Nullable
     public static Character getCharacter(int charId) {
         return DatabaseHandler.Characters.stream()
                 .filter(e -> e.id == charId)
@@ -30,21 +34,27 @@ public class CharacterHandler {
                 .orElse(null);
     }
 
-    public static Character getCharacter(Player player) {
+    @Nullable
+    public static Character getCharacter(@NotNull Account account) {
+        return getCharacter(account.selectedChar);
+    }
+
+    @Nullable
+    public static Character getCharacter(@NotNull Player player) {
         return getCharacter(getCharId(player));
     }
 
-    public static void openSelectCharTypeMenu(Player player) {
+    public static void openSelectCharTypeMenu(@NotNull Player player) {
         player.setInvisible(true);
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(Constants.DARK);
         InventoryHandler.buildInventory(player, "§lWähle einen Charakter-Typen", InventoryType.HOPPER, () -> openSelectCharTypeMenu(player),
-                new InventoryHandler.CustomInventoryItem(1, new ItemBuilder(Material.STICK, "§6§lMagier").build(), () -> createChar(player, 1)),
-                new InventoryHandler.CustomInventoryItem(2, new ItemBuilder(Material.BOW, "§6§lBogenschütze").build(), () -> createChar(player, 2)),
-                new InventoryHandler.CustomInventoryItem(3, new ItemBuilder(Material.IRON_SWORD, "§6§lKrieger").build(), () -> createChar(player, 3)));
-    }
+                new InventoryHandler.CustomInventoryItem(1, new ItemBuilder(Material.STICK, "§6§lMagier").build(), () -> createChar(player, 1), true, true),
+                new InventoryHandler.CustomInventoryItem(2, new ItemBuilder(Material.BOW, "§6§lBogenschütze").build(), () -> createChar(player, 2), true, true),
+                new InventoryHandler.CustomInventoryItem(3, new ItemBuilder(Material.IRON_SWORD, "§6§lKrieger").build(), () -> createChar(player, 3), true,true));
+   }
 
-    private static void createChar(Player player, int characterClass) {
+    private static void createChar(@NotNull Player player, int characterClass) {
         var account = AccountHandler.getAccount(player);
         var character = new Character(account.id, characterClass, 0, 0);
         DatabaseHandler.Characters.add(character);

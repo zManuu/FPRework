@@ -3,7 +3,9 @@ package de.manu.fprework.listeners;
 import com.google.gson.Gson;
 import de.manu.fprework.FPRework;
 import de.manu.fprework.handler.CharacterHandler;
+import de.manu.fprework.handler.ItemHandler;
 import de.manu.fprework.handler.SkillsHandler;
+import de.manu.fprework.utils.Constants;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -20,7 +22,7 @@ import java.util.List;
 
 public class SkillListener implements Listener {
 
-    private class Combo {
+    private static class Combo {
         public Player player;
         public long last;
         public String combo;
@@ -44,8 +46,9 @@ public class SkillListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
         var player = event.getPlayer();
+        var itemType = ItemHandler.getItemDataByPDC(event.getItem());
 
-        if (!player.getInventory().getItemInMainHand().hasItemMeta()) return;
+        if (itemType == null || itemType.type != 2) return;
 
         var combo = getCombo(player);
         var clicked = switch (event.getAction()) {
@@ -72,28 +75,31 @@ public class SkillListener implements Listener {
 
         if (combo.combo.length() == 3) {
             // Finished
-            var bind = SkillsHandler.getCharacterSkillBind(CharacterHandler.getCharId(player), combo.combo);
             activeCombos.remove(combo);
-            if (bind == null) return;
-            var skill = SkillsHandler.getSkill(bind.skillId);
-            if (skill == null) return;
+            var bind = SkillsHandler.getCharacterSkillBind(CharacterHandler.getCharId(player), combo.combo);
+            var skill = bind != null ? SkillsHandler.getSkill(bind.skillId) : null;
+            if (bind == null || skill == null) {
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§cKein Skill gespeichert..."));
+                return;
+            }
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§a" + skill.name + "..."));
             SkillsHandler.startSkill(player, skill);
         }
     }
 
-    /*public SkillListener() {
+    public SkillListener() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(FPRework.INSTANCE, () -> {
             var time = System.currentTimeMillis();
             activeCombos.removeIf(combo -> {
                 var last = combo.last;
                 var diff = time - last;
                 if (diff > 2000) {
-                    combo.player.sendMessage("Combo wurde abgebrochen!");
+                    combo.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§cAbgebrochen..."));
                     return true;
                 }
                 return false;
             });
         }, 0, 10);
-    }*/
+    }
 
 }

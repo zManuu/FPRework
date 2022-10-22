@@ -1,16 +1,16 @@
 package de.manu.fprework.listeners;
 
-import de.manu.fprework.handler.CharacterHandler;
-import de.manu.fprework.handler.DatabaseHandler;
-import de.manu.fprework.handler.InventoryHandler;
-import de.manu.fprework.handler.ItemHandler;
+import de.manu.fprework.handler.*;
 import de.manu.fprework.utils.Constants;
+import de.manu.fprework.utils.ItemBuilder;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
@@ -70,6 +70,7 @@ public class InventoryListener implements Listener {
             var itemType = ItemHandler.getItemDataByPDC(item);
             if (itemType == null) return;
             if (itemType.type == 1) {
+                // Consumable
                 var cStats = ItemHandler.getItemStatsConsumable(itemType);
                 if (cStats == null) return;
                 player.setFoodLevel(player.getFoodLevel() + cStats.hunger);
@@ -78,6 +79,18 @@ public class InventoryListener implements Listener {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.getByName(cStats.effectName), cStats.effectDuration, cStats.effectStrength));
                 }
                 item.setAmount(item.getAmount() - 1);
+            } else if (itemType.type == 5) {
+                // Static
+                if (itemType.name.equals("static_Questbook")) {
+                    InventoryHandler.buildInventory(player, "§9§lQuests", InventoryType.CHEST);
+                } else if (itemType.name.equals("static_Charactermanagement")) {
+                    InventoryHandler.buildInventory(player, "§9§lCharakter-Verwaltung", InventoryType.CHEST,
+                            InventoryHandler.item(11, new ItemBuilder(Material.BLAZE_ROD, "§5§lSkills"), () -> SkillsHandler.openSkillBindMenu(player)),
+                            InventoryHandler.item(12, new ItemBuilder(Material.GHAST_TEAR, "§b§lSoulpoints: 3")),
+                            InventoryHandler.item(13, new ItemBuilder(Material.FILLED_MAP, "§7§lStats")),
+                            InventoryHandler.item(14, new ItemBuilder(Material.COMPASS, "§e§lSpielzeit")),
+                            InventoryHandler.item(15, new ItemBuilder(Material.SHIELD, "§c§lClan")));
+                }
             }
         }
     }

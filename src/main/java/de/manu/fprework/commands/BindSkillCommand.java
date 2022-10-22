@@ -18,32 +18,7 @@ public class BindSkillCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) return true;
         if (args.length != 2) return true;
 
-        var charId = CharacterHandler.getCharId(player);
-        var bind = args[0];
-        var skillName = args[1];
-        var skill = SkillsHandler.getSkill(skillName);
-
-        if (skill == null) {
-            player.sendMessage(Constants.M_ERROR + "Skill wurde nicht gefunden!");
-            return true;
-        }
-
-        if (!Constants.SKILL_BINDS.contains(bind)) {
-            player.sendMessage(Constants.M_ERROR + "Ungültiger Bind!");
-            return true;
-        }
-
-        var existingBind = SkillsHandler.getCharacterSkillBind(charId, bind);
-        if (existingBind != null) {
-            DatabaseHandler.CharacterSkillBinds.remove(existingBind);
-            DatabaseHandler.table(CharacterSkillBind.class).remove(existingBind);
-        }
-
-        var skillBind = new CharacterSkillBind(charId, skill.id, bind);
-        DatabaseHandler.CharacterSkillBinds.add(skillBind);
-        DatabaseHandler.table(CharacterSkillBind.class).insert(skillBind);
-
-        player.sendMessage(Constants.M_SUCCESS + "Der Skill " + skillName + " ist jetzt auf die Tastenkombination " + bind + " gespeichert!");
+        SkillsHandler.bindSkill(player, args[0], args[1]);
 
         return false;
     }
