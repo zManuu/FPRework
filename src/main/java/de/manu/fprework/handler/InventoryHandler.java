@@ -37,9 +37,8 @@ public class InventoryHandler {
         openMenus.stream()
                 .filter(e -> e.player.equals(event.getPlayer()))
                 .findAny().ifPresent(menu -> {
-                    if (menu.onClose != null) {
+                    if (menu.onClose != null)
                         menu.onClose.run();
-                    }
                     openMenus.remove(menu);
                 });
     }
@@ -59,8 +58,8 @@ public class InventoryHandler {
             if (event.getSlot() != slot) continue;
 
             if (item.closesInv) {
-                event.getWhoClicked().closeInventory();
                 openMenus.remove(menu);
+                event.getWhoClicked().closeInventory();
             }
 
             if (item.onClick != null)
@@ -94,6 +93,7 @@ public class InventoryHandler {
             this.onClose = onClose;
             this.items = items;
         }
+
     }
 
     public static class CustomInventoryItem {

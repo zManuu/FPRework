@@ -2,9 +2,7 @@ package de.manu.fprework.listeners;
 
 import com.google.gson.Gson;
 import de.manu.fprework.FPRework;
-import de.manu.fprework.handler.CharacterHandler;
-import de.manu.fprework.handler.ItemHandler;
-import de.manu.fprework.handler.SkillsHandler;
+import de.manu.fprework.handler.*;
 import de.manu.fprework.utils.Constants;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -71,7 +69,7 @@ public class SkillListener implements Listener {
             case 3 -> "§8[§b§l" + combo.combo.toCharArray()[0] + "§8] [§b§l" + combo.combo.toCharArray()[1] + "§8] [§b§l" + combo.combo.toCharArray()[2] + "§8]";
             default -> "§4ERROR";
         };
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(actionBarMsg));
+        ActionbarHandler.send(player, 2, actionBarMsg);
 
         if (combo.combo.length() == 3) {
             // Finished
@@ -79,10 +77,15 @@ public class SkillListener implements Listener {
             var bind = SkillsHandler.getCharacterSkillBind(CharacterHandler.getCharId(player), combo.combo);
             var skill = bind != null ? SkillsHandler.getSkill(bind.skillId) : null;
             if (bind == null || skill == null) {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§cKein Skill gespeichert..."));
+                ActionbarHandler.send(player, 2, "§cKein Skill gespeichert...");
                 return;
             }
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§a" + skill.name + "..."));
+            if (!StaminaHandler.doesPlayerHaveStamina(player, skill.price)) {
+                ActionbarHandler.send(player, 2, "§cNicht genügend Stamina...");
+                return;
+            }
+            StaminaHandler.removePlayerStamina(player, skill.price);
+            ActionbarHandler.send(player, 2, "§a" + skill.name + "...");
             SkillsHandler.startSkill(player, skill);
         }
     }
@@ -94,7 +97,7 @@ public class SkillListener implements Listener {
                 var last = combo.last;
                 var diff = time - last;
                 if (diff > 2000) {
-                    combo.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§cAbgebrochen..."));
+                    ActionbarHandler.send(combo.player, 2, "§cAbgebrochen...");
                     return true;
                 }
                 return false;

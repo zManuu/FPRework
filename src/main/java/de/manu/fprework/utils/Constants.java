@@ -1,6 +1,7 @@
 package de.manu.fprework.utils;
 
 import org.bukkit.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +29,10 @@ public class Constants {
             "CHEST", "BLAST_FURNACE", "BARREL", "STONECUTTER", "ANVIL", "CHIPPED_ANVIL", "DAMAGED_ANVIL", "LEGACY_ANVIL",
             "LEGACY_WORKBENCH", "LEVER", "SMOKER", "CRAFTING_TABLE", "LEGACY_CHEST", "TRAPPED_CHEST", "LEGACY_FURNACE",
             "LEGACY_BURNING_FURNACE", "FURNACE", "BREWING_STAND", "LEGACY_BREWING_STAND", "LEGACY_BREWING_STAND_ITEM",
-            "LOOM", "LECTERN", "ITEM_FRAME", "SMITHING_TABLE", "CARTOGRAPHY_TABLE", "FLOWER_POT"
+            "LOOM", "LECTERN", "ITEM_FRAME", "SMITHING_TABLE", "CARTOGRAPHY_TABLE", "FLOWER_POT", "GRINDSTONE"
     );
     public static List<String> SKILL_BINDS = Arrays.asList("LLL", "LLR", "LRR", "RRR", "RRL", "RLL", "LRL", "RLR");
+    public static ItemStack CLOSE_ITEM = new ItemBuilder(Material.BARRIER, "§cSchließen").build();
+    public static int MAX_STAMINA = 10;
 
 }

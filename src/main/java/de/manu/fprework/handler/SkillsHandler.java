@@ -5,6 +5,7 @@ import de.manu.fprework.models.database.CharacterSkillBind;
 import de.manu.fprework.models.database.ServerSkill;
 import de.manu.fprework.utils.Constants;
 import de.manu.fprework.utils.ItemBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -45,37 +46,51 @@ public class SkillsHandler {
 
     public static void init() {
         getSkill(1).setExecutor(player -> {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1));
-            var velocity = player.getLocation().getDirection().multiply(1.25);
-            velocity.setY(0.015);
-            player.setVelocity(velocity);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15, 1));
+            player.setVelocity(player.getLocation().getDirection().multiply(1.25).setY(0.5));
             FPRework.setTimeout(() -> {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 1));
-            }, 20);
+            }, 15);
         });
     }
 
     public static void openSkillBindMenu(@NotNull Player player) {
-        var items = new InventoryHandler.CustomInventoryItem[Constants.SKILL_BINDS.size()];
-        for (var i=0; i<items.length; i++) {
+        var charId = CharacterHandler.getCharId(player);
+
+        // Normal Items (Combos)
+        var items = new InventoryHandler.CustomInventoryItem[9];
+        for (var i=0; i<8; i++) {
             var bind = Constants.SKILL_BINDS.get(i);
-            items[i] = new InventoryHandler.CustomInventoryItem(i + 11,
-                    new ItemBuilder(Material.FILLED_MAP, "§8§l" + bind).build(),
+            var currentBind = getCharacterSkillBind(charId, bind);
+            var itemBuilder = new ItemBuilder(Material.FILLED_MAP);
+            itemBuilder.displayname("§b" + bind);
+            if (currentBind != null)
+                itemBuilder.lore( "§8➥ §7Momentan: §b" + getSkill(currentBind.skillId).name);
+            items[i] = new InventoryHandler.CustomInventoryItem(i, itemBuilder.build(),
                     () -> openSkillBindSubMenu(player, bind), true, true);
         }
-        InventoryHandler.buildInventory(player, "§6§lWähle eine Komibination", InventoryType.CHEST, items);
+
+        // Close Item
+        items[8] = new InventoryHandler.CustomInventoryItem(8, Constants.CLOSE_ITEM, null, true, true);
+
+        InventoryHandler.buildInventory(player, "§9Wähle eine Komibination", InventoryType.DROPPER, items);
     }
 
     private static void openSkillBindSubMenu(@NotNull Player player, @NotNull String bind) {
         var skills = DatabaseHandler.ServerSkills.toArray(ServerSkill[]::new);
         var items = new InventoryHandler.CustomInventoryItem[skills.length];
         for (var i=0; i<items.length; i++) {
-            var skillName = skills[i].name;
-            items[i] = new InventoryHandler.CustomInventoryItem(i + 1,
-                    new ItemBuilder(Material.FILLED_MAP, "§8§l" + skillName).build(),
-                    () -> bindSkill(player, bind, skillName), true, true);
+            var skill = skills[i];
+            var material = skill.bindMenuMaterial.isEmpty() ? Material.FILLED_MAP : Material.valueOf(skill.bindMenuMaterial);
+            var itemBuilder = new ItemBuilder(material);
+            itemBuilder.displayname("§b" + skill.name);
+            itemBuilder.lore(" §8➥ §7Mindest-Level: §b" + skill.requiredLevel);
+            itemBuilder.lore(" §8➥ §7Stamina: §b" + skill.price);
+            itemBuilder.lore(" §8➥ §7Cooldown: §b" + skill.cooldown + "s");
+            items[i] = new InventoryHandler.CustomInventoryItem(i, itemBuilder.build(),
+                    () -> bindSkill(player, bind, skill.name), true, true);
         }
-        InventoryHandler.buildInventory(player, "§6§lWähle einen Skill", InventoryType.CHEST, items);
+        InventoryHandler.buildInventory(player, "§9Wähle einen Skill", InventoryType.CHEST, items);
     }
 
     public static void bindSkill(@NotNull Player player, @NotNull String bind, @NotNull String skillName) {

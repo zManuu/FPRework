@@ -54,6 +54,19 @@ public class CharacterHandler {
                 new InventoryHandler.CustomInventoryItem(3, new ItemBuilder(Material.IRON_SWORD, "§6§lKrieger").build(), () -> createChar(player, 3), true,true));
    }
 
+   public static String getActionBarXpString(Player player) {
+        var character = getCharacter(player);
+
+        if (character == null)
+            return "§4§lERROR";
+
+        var level = character.level;
+        var xp = character.xp;
+        var xpNeeded = (level + 1) * 1000;
+
+        return ((xp / xpNeeded) * 100) + "%";
+   }
+
     private static void createChar(@NotNull Player player, int characterClass) {
         var account = AccountHandler.getAccount(player);
         var character = new Character(account.id, characterClass, 0, 0);

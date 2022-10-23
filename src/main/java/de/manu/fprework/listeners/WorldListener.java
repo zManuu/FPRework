@@ -19,6 +19,9 @@ import org.bukkit.event.player.*;
 
 /**
  * In this class, all the "default" minecraft events like crafting or eating are canceled.
+ * Todo: You can still eat cake
+ * Todo: Breaking a block resets the texture (owner) (?? Maybe not possible ??)
+ * Todo: Composer
  */
 public class WorldListener implements Listener {
 
