@@ -3,6 +3,7 @@ package de.manu.fprework.listeners;
 import com.google.gson.Gson;
 import de.manu.fprework.FPRework;
 import de.manu.fprework.handler.*;
+import de.manu.fprework.models.database.ServerSkill;
 import de.manu.fprework.utils.Constants;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,11 +13,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SkillListener implements Listener {
 
@@ -80,11 +86,16 @@ public class SkillListener implements Listener {
                 ActionbarHandler.send(player, 2, "§cKein Skill gespeichert...");
                 return;
             }
-            if (!StaminaHandler.doesPlayerHaveStamina(player, skill.price)) {
+            if (!SkillsHandler.doesPlayerHaveStamina(player, skill.price)) {
                 ActionbarHandler.send(player, 2, "§cNicht genügend Stamina...");
                 return;
             }
-            StaminaHandler.removePlayerStamina(player, skill.price);
+            if (SkillsHandler.isSkillInCooldown(player, skill)) {
+                var remainingTime = SkillsHandler.getSkillCooldown(player, skill);
+                ActionbarHandler.send(player, 2, "§cDer Skill ist noch im Cooldown! (" + remainingTime + ")");
+                return;
+            }
+            SkillsHandler.removePlayerStamina(player, skill.price);
             ActionbarHandler.send(player, 2, "§a" + skill.name + "...");
             SkillsHandler.startSkill(player, skill);
         }

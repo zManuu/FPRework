@@ -14,6 +14,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class SkillsHandler {
 
     @Nullable
@@ -34,6 +41,7 @@ public class SkillsHandler {
 
     public static void startSkill(@NotNull Player player, @NotNull ServerSkill skill) {
         skill.executor.accept(player);
+        getData(player).getCooldownMap().put(skill, skill.cooldown);
     }
 
     @Nullable
@@ -45,6 +53,31 @@ public class SkillsHandler {
     }
 
     public static void init() {
+        dataList = new ArrayList<>();
+        FPRework.setInterval(() -> {
+            for (var player : Bukkit.getOnlinePlayers()) {
+                var data = getData(player);
+
+                // Stamina
+                data.setStamina(data.getStamina() + 0.25f);
+                if (data.getStamina() > Constants.MAX_STAMINA)
+                    data.setStamina(Constants.MAX_STAMINA);
+                ActionbarHandler.send(player, 1, "§8[§a" + CharacterHandler.getActionBarXpString(player)
+                        + "§8] - [§9" + data.getRoundedStamina() + "✶§8]");
+
+                // Cooldown
+                for (var skillInCooldown : data.getCooldownMap().keySet()) {
+                    var remainingCooldown = data.getCooldownMap().get(skillInCooldown);
+                    if (remainingCooldown - 10 < 1) {
+                        // Cooldown ended
+                        data.getCooldownMap().remove(skillInCooldown);
+                        continue;
+                    }
+                    data.getCooldownMap().put(skillInCooldown, remainingCooldown - 10);
+                }
+            }
+        }, 10);
+
         getSkill(1).setExecutor(player -> {
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15, 1));
             player.setVelocity(player.getLocation().getDirection().multiply(1.25).setY(0.5));
@@ -59,13 +92,13 @@ public class SkillsHandler {
 
         // Normal Items (Combos)
         var items = new InventoryHandler.CustomInventoryItem[9];
-        for (var i=0; i<8; i++) {
+        for (var i = 0; i < 8; i++) {
             var bind = Constants.SKILL_BINDS.get(i);
             var currentBind = getCharacterSkillBind(charId, bind);
             var itemBuilder = new ItemBuilder(Material.FILLED_MAP);
             itemBuilder.displayname("§b" + bind);
             if (currentBind != null)
-                itemBuilder.lore( "§8➥ §7Momentan: §b" + getSkill(currentBind.skillId).name);
+                itemBuilder.lore("§8➥ §7Momentan: §b" + getSkill(currentBind.skillId).name);
             items[i] = new InventoryHandler.CustomInventoryItem(i, itemBuilder.build(),
                     () -> openSkillBindSubMenu(player, bind), true, true);
         }
@@ -79,7 +112,7 @@ public class SkillsHandler {
     private static void openSkillBindSubMenu(@NotNull Player player, @NotNull String bind) {
         var skills = DatabaseHandler.ServerSkills.toArray(ServerSkill[]::new);
         var items = new InventoryHandler.CustomInventoryItem[skills.length];
-        for (var i=0; i<items.length; i++) {
+        for (var i = 0; i < items.length; i++) {
             var skill = skills[i];
             var material = skill.bindMenuMaterial.isEmpty() ? Material.FILLED_MAP : Material.valueOf(skill.bindMenuMaterial);
             var itemBuilder = new ItemBuilder(material);
@@ -118,6 +151,72 @@ public class SkillsHandler {
         DatabaseHandler.table(CharacterSkillBind.class).insert(skillBind);
 
         player.sendMessage(Constants.M_SUCCESS + "Der Skill " + skillName + " ist jetzt auf die Tastenkombination " + bind + " gespeichert!");
+    }
+
+    // COOLDOWN & STAMINA
+
+    private static class SkillPlayerWrapper {
+
+        private static final DecimalFormat df = new DecimalFormat("0.00");
+
+        private final Player player;
+        private float stamina;
+        private final Map<ServerSkill, Integer> cooldownMap;
+
+        public SkillPlayerWrapper(Player player) {
+            this.player = player;
+            this.stamina = Constants.MAX_STAMINA;
+            this.cooldownMap = new HashMap<>();
+            dataList.add(this);
+        }
+
+        public Player getPlayer() {
+            return player;
+        }
+
+        public float getStamina() {
+            return stamina;
+        }
+
+        public String getRoundedStamina() {
+            df.setRoundingMode(RoundingMode.DOWN);
+            return df.format(stamina);
+        }
+
+        public Map<ServerSkill, Integer> getCooldownMap() {
+            return cooldownMap;
+        }
+
+        public void setStamina(float stamina) {
+            this.stamina = stamina;
+        }
+    }
+
+    public static List<SkillPlayerWrapper> dataList;
+
+    @NotNull
+    public static SkillPlayerWrapper getData(@NotNull Player player) {
+        return dataList.stream()
+                .filter(e -> e.player.equals(player))
+                .findAny()
+                .orElse(new SkillPlayerWrapper(player));
+    }
+
+    public static boolean doesPlayerHaveStamina(@NotNull Player player, int stamina) {
+        return getData(player).getStamina() >= stamina;
+    }
+
+    public static void removePlayerStamina(@NotNull Player player, int stamina) {
+        var obj = getData(player);
+        obj.setStamina(obj.getStamina() - stamina);
+    }
+
+    public static boolean isSkillInCooldown(@NotNull Player player, @NotNull ServerSkill skill) {
+        return getData(player).getCooldownMap().containsKey(skill);
+    }
+
+    public static int getSkillCooldown(@NotNull Player player, @NotNull ServerSkill skill) {
+        return getData(player).getCooldownMap().get(skill);
     }
 
 }

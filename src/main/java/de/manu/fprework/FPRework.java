@@ -42,7 +42,6 @@ public final class FPRework extends JavaPlugin {
         PlaytimeHandler.init();
         WorldHandler.init();
         SkillsHandler.init();
-        StaminaHandler.init();
         ActionbarHandler.init();
 
         registerCommands(

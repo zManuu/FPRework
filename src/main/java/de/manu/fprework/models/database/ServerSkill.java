@@ -12,12 +12,12 @@ public class ServerSkill extends Entity {
     public String name;
     public int requiredLevel;
     public int price;
-    public float cooldown;
+    public int cooldown;
     public String bindMenuMaterial;
     @JavaEFIgnore
     public Consumer<Player> executor;
 
-    public ServerSkill(int id, String name, int requiredLevel, int price, float cooldown, String bindMenuMaterial) {
+    public ServerSkill(int id, String name, int requiredLevel, int price, int cooldown, String bindMenuMaterial) {
         this.id = id;
         this.name = name;
         this.requiredLevel = requiredLevel;
