@@ -6,6 +6,7 @@ import de.manu.fprework.models.database.Character;
 import de.manu.fprework.utils.javaef.Database;
 import de.manu.fprework.utils.javaef.Entity;
 import de.manu.fprework.utils.javaef.Table;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,10 @@ public class DatabaseHandler {
     public static List<ServerItemStatsWeapon> ServerItemStatsWeapon;
     public static List<ServerSkill> ServerSkills;
     public static List<CharacterSkillBind> CharacterSkillBinds;
+    public static List<ServerShop> ServerShops;
+    public static List<ServerShopItem> ServerShopItems;
 
+    @NotNull
     public static <T extends Entity> Table<T> table(Class<T> clazz) {
         return (Table<T>) Tables.stream()
                 .filter(e -> e.mappedEntityClass.equals(clazz))
@@ -38,14 +42,16 @@ public class DatabaseHandler {
         Database = new Database("localhost", "root", "", "fprework", 3306);
 
         Tables = Arrays.asList(
-                new Table<>(Database, "accounts", Account.class),
-                new Table<>(Database, "characters", Character.class),
-                new Table<>(Database, "characters_lockeditems", CharacterLockedItem.class),
-                new Table<>(Database, "server_items", ServerItem.class),
-                new Table<>(Database, "server_items_stats_consumable", ServerItemStatsConsumable.class),
-                new Table<>(Database, "server_items_stats_weapon", ServerItemStatsWeapon.class),
-                new Table<>(Database, "server_skills", ServerSkill.class),
-                new Table<>(Database, "character_skill_binds", CharacterSkillBind.class)
+                new Table<>("accounts", Account.class),
+                new Table<>("characters", Character.class),
+                new Table<>("characters_lockeditems", CharacterLockedItem.class),
+                new Table<>("server_items", ServerItem.class),
+                new Table<>("server_items_stats_consumable", ServerItemStatsConsumable.class),
+                new Table<>("server_items_stats_weapon", ServerItemStatsWeapon.class),
+                new Table<>("server_skills", ServerSkill.class),
+                new Table<>("character_skill_binds", CharacterSkillBind.class),
+                new Table<>("server_shops", ServerShop.class),
+                new Table<>("server_shop_items", ServerShopItem.class)
         );
 
         Accounts = table(Account.class).getAll();
@@ -56,6 +62,8 @@ public class DatabaseHandler {
         ServerItemStatsWeapon = table(ServerItemStatsWeapon.class).getAll();
         ServerSkills = table(ServerSkill.class).getAll();
         CharacterSkillBinds = table(CharacterSkillBind.class).getAll();
+        ServerShops = table(ServerShop.class).getAll();
+        ServerShopItems = table(ServerShopItem.class).getAll();
 
         FPRework.print("§c[FP] DB-Load | Accounts: " + Accounts.size());
         FPRework.print("§c[FP] DB-Load | Characters: " + Characters.size());
@@ -65,6 +73,8 @@ public class DatabaseHandler {
         FPRework.print("§c[FP] DB-Load | ServerItemStatsWeapon: " + ServerItemStatsWeapon.size());
         FPRework.print("§c[FP] DB-Load | ServerSkills: " + ServerSkills.size());
         FPRework.print("§c[FP] DB-Load | CharacterSkillBinds: " + CharacterSkillBinds.size());
+        FPRework.print("§c[FP] DB-Load | ServerShops: " + ServerShops.size());
+        FPRework.print("§c[FP] DB-Load | ServerShopItems: " + ServerShopItems.size());
     }
 
 }

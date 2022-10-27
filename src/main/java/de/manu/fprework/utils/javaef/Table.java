@@ -1,6 +1,7 @@
 package de.manu.fprework.utils.javaef;
 
 import com.google.gson.Gson;
+import de.manu.fprework.handler.DatabaseHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,8 +17,8 @@ public class Table<T extends Entity> {
     public final List<String> fields;
     public final Class<? extends Entity> mappedEntityClass;
 
-    public Table(@NotNull Database database, @NotNull String name, @NotNull Class<T> clazz) {
-        this.database = database;
+    public Table(@NotNull String name, @NotNull Class<T> clazz) {
+        this.database = DatabaseHandler.Database;
         this.name = name;
         this.fields = new LinkedList<>();
         this.mappedEntityClass = clazz;

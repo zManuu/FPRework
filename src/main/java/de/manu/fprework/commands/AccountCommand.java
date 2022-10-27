@@ -14,8 +14,7 @@ public class AccountCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player) {
-            var player = (Player) sender;
+        if (sender instanceof Player player) {
             var acc = AccountHandler.getAccount(player);
             switch (args.length) {
                 case 1:

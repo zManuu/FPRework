@@ -34,5 +34,7 @@ public class Constants {
     public static List<String> SKILL_BINDS = Arrays.asList("LLL", "LLR", "LRR", "RRR", "RRL", "RLL", "LRL", "RLR");
     public static ItemStack CLOSE_ITEM = new ItemBuilder(Material.BARRIER, "§cSchließen").build();
     public static int MAX_STAMINA = 10;
+    public static int HEAD_RED = 52464;
+    public static int HEAD_GREEN = 55323;
 
 }

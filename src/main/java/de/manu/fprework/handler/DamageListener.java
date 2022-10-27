@@ -1,7 +1,6 @@
 package de.manu.fprework.handler;
 
 import de.manu.fprework.utils.Constants;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,8 +8,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.persistence.PersistentDataType;
-
-import java.util.Arrays;
 
 public class DamageListener implements Listener {
 
