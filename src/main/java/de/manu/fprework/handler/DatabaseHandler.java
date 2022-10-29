@@ -29,6 +29,7 @@ public class DatabaseHandler {
     public static List<CharacterSkillBind> CharacterSkillBinds;
     public static List<ServerShop> ServerShops;
     public static List<ServerShopItem> ServerShopItems;
+    public static List<ServerFarmBlock> ServerFarmBlocks;
 
     @NotNull
     public static <T extends Entity> Table<T> table(Class<T> clazz) {
@@ -51,7 +52,8 @@ public class DatabaseHandler {
                 new Table<>("server_skills", ServerSkill.class),
                 new Table<>("character_skill_binds", CharacterSkillBind.class),
                 new Table<>("server_shops", ServerShop.class),
-                new Table<>("server_shop_items", ServerShopItem.class)
+                new Table<>("server_shop_items", ServerShopItem.class),
+                new Table<>("server_farm_blocks", ServerFarmBlock.class)
         );
 
         Accounts = table(Account.class).getAll();
@@ -64,6 +66,7 @@ public class DatabaseHandler {
         CharacterSkillBinds = table(CharacterSkillBind.class).getAll();
         ServerShops = table(ServerShop.class).getAll();
         ServerShopItems = table(ServerShopItem.class).getAll();
+        ServerFarmBlocks = table(ServerFarmBlock.class).getAll();
 
         FPRework.print("§c[FP] DB-Load | Accounts: " + Accounts.size());
         FPRework.print("§c[FP] DB-Load | Characters: " + Characters.size());
@@ -75,6 +78,7 @@ public class DatabaseHandler {
         FPRework.print("§c[FP] DB-Load | CharacterSkillBinds: " + CharacterSkillBinds.size());
         FPRework.print("§c[FP] DB-Load | ServerShops: " + ServerShops.size());
         FPRework.print("§c[FP] DB-Load | ServerShopItems: " + ServerShopItems.size());
+        FPRework.print("§c[FP] DB-Load | ServerFarmBlocks: " + ServerFarmBlocks.size());
     }
 
 }

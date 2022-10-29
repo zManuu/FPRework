@@ -36,5 +36,8 @@ public class Constants {
     public static int MAX_STAMINA = 10;
     public static int HEAD_RED = 52464;
     public static int HEAD_GREEN = 55323;
+    public static String[] NPC_VILLAGER_SKINS = {
+            "5Degrees_", "ToweringPark682", "Zw3ter", "Salamanca_032", "CkTurok", "_thx"
+    };
 
 }

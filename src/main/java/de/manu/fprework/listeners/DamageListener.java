@@ -1,5 +1,6 @@
-package de.manu.fprework.handler;
+package de.manu.fprework.listeners;
 
+import de.manu.fprework.handler.SkillsHandler;
 import de.manu.fprework.utils.Constants;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -18,6 +19,7 @@ public class DamageListener implements Listener {
         event.setNewExp(0);
         event.setNewLevel(0);
         event.setDeathMessage("§8[§c†§8] §c" + event.getEntity().getName());
+        SkillsHandler.resetPlayer(event.getEntity());
     }
 
     @EventHandler

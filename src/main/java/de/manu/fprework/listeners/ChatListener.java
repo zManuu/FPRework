@@ -1,8 +1,7 @@
 package de.manu.fprework.listeners;
 
-import de.manu.fprework.handler.AccountHandler;
+import de.manu.fprework.commands.FarmBlockCommand;
 import de.manu.fprework.handler.DatabaseHandler;
-import de.manu.fprework.utils.Constants;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +13,7 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public static void onTabComplete(TabCompleteEvent event) {
-        if (!(event.getSender() instanceof Player)) return;
+        if (!(event.getSender() instanceof Player player)) return;
 
         var buffer = event.getBuffer();
         var args = buffer.split(" ");
@@ -38,6 +37,12 @@ public class ChatListener implements Listener {
                     }
                 } else if (args.length == 2) {
                     res.add("<anzahl>");
+                }
+                break;
+            case "/farmblock":
+                if (args.length == 1 && !FarmBlockCommand.playersInFarmBlockMode.containsKey(player)) {
+                    for (var itemType : DatabaseHandler.ServerItems)
+                        res.add(itemType.name);
                 }
                 break;
         }

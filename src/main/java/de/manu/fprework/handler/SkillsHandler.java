@@ -153,6 +153,12 @@ public class SkillsHandler {
         player.sendMessage(Constants.M_SUCCESS + "Der Skill " + skillName + " ist jetzt auf die Tastenkombination " + bind + " gespeichert!");
     }
 
+    public static void resetPlayer(@NotNull Player player) {
+        var wrappedData = getData(player);
+        wrappedData.setStamina(Constants.MAX_STAMINA);
+        wrappedData.getCooldownMap().clear();
+    }
+
     // COOLDOWN & STAMINA
 
     private static class SkillPlayerWrapper {

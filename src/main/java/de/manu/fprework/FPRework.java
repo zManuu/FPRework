@@ -7,7 +7,6 @@ import de.manu.fprework.utils.Constants;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,7 +48,8 @@ public final class FPRework extends JavaPlugin implements Listener {
                 AccountCommand.class,
                 LockCommand.class,
                 ItemCommand.class,
-                ReloadDBCommand.class
+                ReloadDBCommand.class,
+                FarmBlockCommand.class
         );
 
         registerListeners(
@@ -60,7 +60,8 @@ public final class FPRework extends JavaPlugin implements Listener {
                 DamageListener.class,
                 WeaponListener.class,
                 SkillListener.class,
-                ShopListener.class
+                ShopListener.class,
+                FarmListener.class
         );
     }
 
